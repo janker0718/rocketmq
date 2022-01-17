@@ -41,6 +41,7 @@ public class KVConfigManager {
         this.namesrvController = namesrvController;
     }
 
+    //启动加载停机前的内容
     public void load() {
         String content = null;
         try {
