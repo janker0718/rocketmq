@@ -55,6 +55,7 @@ public class BrokerStartup {
     public static InternalLogger log;
 
     public static void main(String[] args) {
+        //启动(先创建BrokerController)
         start(createBrokerController(args));
     }
 
@@ -88,19 +89,22 @@ public class BrokerStartup {
     }
 
     public static BrokerController createBrokerController(String[] args) {
+        //设置版本号
         System.setProperty(RemotingCommand.REMOTING_VERSION_KEY, Integer.toString(MQVersion.CURRENT_VERSION));
-
+        //设置socket发送缓冲大小
         if (null == System.getProperty(NettySystemConfig.COM_ROCKETMQ_REMOTING_SOCKET_SNDBUF_SIZE)) {
             NettySystemConfig.socketSndbufSize = 131072;
         }
-
+        //设置socket接收缓冲大小
         if (null == System.getProperty(NettySystemConfig.COM_ROCKETMQ_REMOTING_SOCKET_RCVBUF_SIZE)) {
             NettySystemConfig.socketRcvbufSize = 131072;
         }
 
         try {
             //PackageConflictDetect.detectFastjson();
+            //构建 options - cli用于解析传递给程序的命令行参数/选项
             Options options = ServerUtil.buildCommandlineOptions(new Options());
+            //解析命令行参数为commandLine
             commandLine = ServerUtil.parseCmdLine("mqbroker", args, buildCommandlineOptions(options),
                 new PosixParser());
             if (null == commandLine) {
