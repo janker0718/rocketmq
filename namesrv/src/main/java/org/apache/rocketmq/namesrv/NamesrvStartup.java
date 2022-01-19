@@ -48,12 +48,14 @@ public class NamesrvStartup {
     private static CommandLine commandLine = null;
 
     public static void main(String[] args) {
+        //启动主函数
         main0(args);
     }
 
     public static NamesrvController main0(String[] args) {
 
         try {
+            //构建NamesrvController
             NamesrvController controller = createNamesrvController(args);
             start(controller);
             String tip = "The Name Server boot success. serializeType=" + RemotingCommand.getSerializeTypeConfigInThisServer();
@@ -74,7 +76,7 @@ public class NamesrvStartup {
         //PackageConflictDetect.detectFastjson();
 
         Options options = ServerUtil.buildCommandlineOptions(new Options());
-        //解析命令行
+        //解析命令行参数
         commandLine = ServerUtil.parseCmdLine("mqnamesrv", args, buildCommandlineOptions(options), new PosixParser());
         if (null == commandLine) {
             System.exit(-1);
@@ -90,7 +92,9 @@ public class NamesrvStartup {
                 InputStream in = new BufferedInputStream(new FileInputStream(file));
                 properties = new Properties();
                 properties.load(in);
+                //属性转对象-namesrvConfig
                 MixAll.properties2Object(properties, namesrvConfig);
+                //属性转对象-nettyServerConfig
                 MixAll.properties2Object(properties, nettyServerConfig);
                 //配置存储路径
                 namesrvConfig.setConfigStorePath(file);
@@ -102,6 +106,7 @@ public class NamesrvStartup {
 
         if (commandLine.hasOption('p')) {
             InternalLogger console = InternalLoggerFactory.getLogger(LoggerName.NAMESRV_CONSOLE_NAME);
+            //打印对象属性
             MixAll.printObjectProperties(console, namesrvConfig);
             MixAll.printObjectProperties(console, nettyServerConfig);
             System.exit(0);

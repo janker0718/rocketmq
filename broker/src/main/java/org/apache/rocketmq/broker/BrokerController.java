@@ -849,44 +849,50 @@ public class BrokerController {
     }
 
     public void start() throws Exception {
+        //启动消息存储
         if (this.messageStore != null) {
             this.messageStore.start();
         }
 
+        //开启remotingServer连接
         if (this.remotingServer != null) {
             this.remotingServer.start();
         }
 
+        //开启fastRemotingServer连接（VIP通道）
         if (this.fastRemotingServer != null) {
             this.fastRemotingServer.start();
         }
 
+        //开启文件监听服务
         if (this.fileWatchService != null) {
             this.fileWatchService.start();
         }
 
+        //启动BrokerOuterAPI 通信客户端开启
         if (this.brokerOuterAPI != null) {
             this.brokerOuterAPI.start();
         }
-
+        //启动PullRequestHoldService任务
         if (this.pullRequestHoldService != null) {
             this.pullRequestHoldService.start();
         }
-
+        //开启ClientHousekeepingService Broker定时清理不活动的客户端
         if (this.clientHousekeepingService != null) {
             this.clientHousekeepingService.start();
         }
-
+        //启动消息过滤服务管理任务
         if (this.filterServerManager != null) {
             this.filterServerManager.start();
         }
-
+        //没有使用DLegerCommitLog
         if (!messageStoreConfig.isEnableDLegerCommitLog()) {
             startProcessorByHa(messageStoreConfig.getBrokerRole());
             handleSlaveSynchronize(messageStoreConfig.getBrokerRole());
             this.registerBrokerAll(true, false, true);
         }
 
+        //开启注册broker任务 （默认30秒调用一次）
         this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
             @Override
@@ -903,6 +909,7 @@ public class BrokerController {
             this.brokerStatsManager.start();
         }
 
+        //broker快速失败任务开启 用于快速响应失败
         if (this.brokerFastFailure != null) {
             this.brokerFastFailure.start();
         }

@@ -61,7 +61,7 @@ public class BrokerStartup {
 
     public static BrokerController start(BrokerController controller) {
         try {
-
+            //Broker控制器启动
             controller.start();
 
             String tip = "The broker[" + controller.getBrokerConfig().getBrokerName() + ", "

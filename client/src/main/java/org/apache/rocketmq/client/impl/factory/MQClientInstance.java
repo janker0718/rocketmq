@@ -208,6 +208,12 @@ public class MQClientInstance {
         return info;
     }
 
+    /**
+     * topic路由信息转Topic订阅信息
+     * @param topic
+     * @param route
+     * @return
+     */
     public static Set<MessageQueue> topicRouteData2TopicSubscribeInfo(final String topic, final TopicRouteData route) {
         Set<MessageQueue> mqList = new HashSet<MessageQueue>();
         List<QueueData> qds = route.getQueueDatas();
